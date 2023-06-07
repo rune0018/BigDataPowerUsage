@@ -1,0 +1,10 @@
+version: '3.4'
+
+services:
+  bigdatareciverpower:
+    image: ${DOCKER_REGISTRY-}bigdatareciverpower
+    build:
+      context: .
+      dockerfile: BigDataReciverPower/Dockerfile
+
+

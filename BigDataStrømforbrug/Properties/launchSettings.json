@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "BigDataStrømforbrug": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}
