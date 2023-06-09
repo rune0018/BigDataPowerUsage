@@ -13,31 +13,43 @@ services:
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
-  prometheus:
-    image: prom/prometheus
-    hostname: prometheus
-    ports:
-      - "9090:9090"
-    volumes:
-      - C:\Users\rune0\Desktop\promethius\prometheus.yml:/etc/prometheus/prometheus.yml
-  grafana:
-    image: grafana/grafana
-    ports:
-      - "3000:3000"
-  Aalborg:
-    image: rune0014/powerusagesim
-    environment:
-      - Endopint=http://bigdatareciver:80
-      - Town=Aalborg
-      - Amount=10
-    depends_on:
-      - bigdatareciverpower
-  kbh:
-    image: rune0014/powerusagesim
-    environment:
-      - Endopint=http://bigdatareciver:80
-      - Town=kbh
-      - Amount=1000
-    depends_on:
-      - bigdatareciverpower
+  #prometheus:
+  #  image: prom/prometheus
+  #  hostname: prometheus
+  #  ports:
+  #    - "9090:9090"
+  #  volumes:
+  #    - C:\Users\rune0\Desktop\promethius\prometheus.yml:/etc/prometheus/prometheus.yml
+  #grafana:
+  #  image: grafana/grafana
+  #  ports:
+  #    - "3000:3000"
+  #Aalborg:
+  #  image: rune0014/powerusagesim
+  #  environment:
+  #    - Endopint=http://bigdatareciver:80
+  #    - Town=Aalborg
+  #    - Amount=10
+  #  depends_on:
+  #    - bigdatareciverpower
+  #kbh:
+  #  image: rune0014/powerusagesim
+  #  environment:
+  #    - Endopint=http://bigdatareciver:80
+  #    - Town=kbh
+  #    - Amount=1000
+  #  depends_on:
+  #    - bigdatareciverpower
 
+
+  bigdatapowerusagevisualisation:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - JsonFromHere=http://bigdatareciver:80
+    ports:
+      - "1337:80"
+      - "443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro

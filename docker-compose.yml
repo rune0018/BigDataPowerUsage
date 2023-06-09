@@ -8,3 +8,10 @@ services:
       dockerfile: BigDataReciverPower/Dockerfile
 
 
+
+  bigdatapowerusagevisualisation:
+    image: ${DOCKER_REGISTRY-}bigdatapowerusagevisualisation
+    build:
+      context: .
+      dockerfile: BigdataPowerUsageVisualisation/Dockerfile
+

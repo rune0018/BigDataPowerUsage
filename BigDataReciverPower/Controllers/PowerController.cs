@@ -38,13 +38,32 @@ namespace BigDataReciverPower.Controllers
 
         }
 
+        [HttpGet("Json")]
+        public IActionResult GetJson()
+        {
+            return Ok(_power);
+        }
         // GET api/<PowerController>/5
         [HttpGet("{id}")]
         public string Get(int id)
         {
             return "value";
         }
-
+        [HttpGet("Generate/{amount}/startseed/{seed}")]
+        public IActionResult GenerateSeeded(int amount,int seed,int startworkat,int homeat,int bedtime,int upat)
+        {
+            var idk = new Power(seed,startworkat,homeat,bedtime,upat)
+            {
+                Time = DateTime.Now,
+                Town = "Generated"
+            };
+            for (int i = 0; i < amount; i++)
+            {
+                idk.Update();
+                _power.Add(new Power() { Usage=idk.Usage,Town=idk.Town,Time=idk.Time});
+            }
+            return Ok();
+        }
         // POST api/<PowerController>
         [HttpPost]
         public IActionResult Post(Power power)
