@@ -33,18 +33,17 @@ namespace BigDataReciverPower
             if (Usage < expectedMax)
                 Usage += Incrementor;
             else
-            
                 if (random.Next() == 1)
                     Usage = Incrementor/2+Usage;
                 else
                     Usage -= Incrementor;
-            
             if (Usage < 0)
                 Usage = 0;
             if (Time.Hour >= Workat && Time.Hour <= Homeat && Time.DayOfWeek != DayOfWeek.Saturday && Time.DayOfWeek != DayOfWeek.Sunday)
                 Usage = (int)(expectedMax * 0.17);
-            if (Time.Hour >= Sleepat && Time.Hour <= Upat)
+            if (Time.Hour >= Sleepat || Time.Hour <= Upat)
                 Usage = (int)(expectedMax * 0.30);
         }
+        
     }
 }

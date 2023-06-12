@@ -49,7 +49,7 @@ namespace BigDataReciverPower.Controllers
         {
             return "value";
         }
-        [HttpGet("Generate/{amount}/startseed/{seed}")]
+        [HttpGet("Generate/{amount}/seed/{seed}")]
         public IActionResult GenerateSeeded(int amount,int seed,int startworkat,int homeat,int bedtime,int upat)
         {
             var idk = new Power(seed,startworkat,homeat,bedtime,upat)
