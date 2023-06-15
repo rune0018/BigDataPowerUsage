@@ -5,7 +5,7 @@ namespace BigdataPowerUsageVisualisation
     public class Power
     {
         public DateTime Time { get; set; }
-        public string? Town { get; set; }
+        public string? House { get; set; }
         public int Usage { get; set; }
         private int Incrementor = 10;
         private double expectedMax { get; set; }

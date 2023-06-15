@@ -21,7 +21,7 @@ namespace BigdataPowerUsageVisualisation.Pages
             HttpResponseMessage datamessege = HttpClient.GetAsync("/api/Power/Json").Result;
             var messege = datamessege.Content.ReadAsStringAsync().Result;
             
-            var sampledata = JsonConvert.DeserializeObject<Power[]>(messege);
+            var sampledata = JsonConvert.DeserializeObject<Dictionary<string, Power[]>>(messege);
             ViewData.Add("data", sampledata);
         }
     }

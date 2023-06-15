@@ -8,7 +8,7 @@ namespace BigDataReciverPower.Controllers
     [ApiController]
     public class PowerController : ControllerBase
     {
-        private static List< Power> _power = new();
+        private static Dictionary<string, List<Power>> _power = new();
         private object _powerLock = new object();
         // GET: api/<PowerController>
         [HttpGet]
@@ -22,8 +22,8 @@ namespace BigDataReciverPower.Controllers
                     return Ok();
                 for (int i = 0; i < _power.Count; i++)
                 {
-                    if (_power[i] is not null)
-                        metricResult += $"power_usage{"{"}label=\"{_power[i].Town}\",Time=\"{_power[i].Time}\"{"}"} {_power[i].Usage}\n";
+                    if (_power["Generated"][i] is not null)
+                        metricResult += $"power_usage{"{"}label=\"{_power["Generated"][i].House}\",Time=\"{_power["Generated"][i].Time}\"{"}"} {_power["Generated"][i].Usage}\n";
                 }
                 //foreach (var power in _power.AsQueryable())
                 //{
@@ -55,21 +55,37 @@ namespace BigDataReciverPower.Controllers
             var idk = new Power(seed,startworkat,homeat,bedtime,upat)
             {
                 Time = DateTime.Now,
-                Town = "Generated"
+                House = "Generated"
             };
+            _power.Add("Generated", new List<Power>());
             for (int i = 0; i < amount; i++)
             {
                 idk.Update();
-                _power.Add(new Power() { Usage=idk.Usage,Town=idk.Town,Time=idk.Time});
+                _power["Generated"].Add(new Power() { Usage=idk.Usage,House=idk.House,Time= new DateTime(idk.Time.Year, idk.Time.Month, idk.Time.Day).AddHours(idk.Time.Hour) });
             }
             return Ok();
         }
         // POST api/<PowerController>
-        [HttpPost]
-        public IActionResult Post(Power power)
+        [HttpPost("Generate")]
+        public IActionResult Post(PowerConfig power)
         {
-            lock (_power) {
-                _power.Add(power);
+            foreach(Power power1 in power.Power) 
+            {
+                Power power2 = new Power(power.Seed)
+                {
+                    House = power1.House,
+                    Time = DateTime.Now,
+                    Workat = power1.Workat,
+                    Homeat = power1.Homeat,
+                    Sleepat = power1.Sleepat,
+                    UpAt = power1.UpAt
+                };
+                _power.Add(power1.House, new List<Power>());
+                for(int i = 0; i<power.Amount; i++)
+                {
+                    power2.Update();
+                    _power[power1.House].Add(new Power() { Usage=power2.Usage,House=power2.House,Time=new DateTime(power2.Time.Year, power2.Time.Month, power2.Time.Day).AddHours(power2.Time.Hour) });
+                }
             }
             //_power.TryAdd(DateTime.Now, power);
             

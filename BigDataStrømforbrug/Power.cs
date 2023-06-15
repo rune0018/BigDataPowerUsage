@@ -14,7 +14,7 @@ namespace BigDataStrømforbrug
         // 4.3 kwh pr dag og op til 133KWh pr måned underhold(21%) vask(20%) køle(17%) TV(15%) mad(11%) lys(10%) div.(5%) varme(2.5%) sauce:  https://findenergi.dk/guides/mit-elforbrug/
         // 4.3 kwh data er tilsvarende 12.19 kwh for familie på 4 sauce: https://www.energifyn.dk/privat/energiradgivning/energisparetips/stromslugere-i-din-bolig/
         public DateTime Time { get; set; }
-        public string? Town { get; set; }
+        public string? House { get; set; }
         public int Usage { get; set; }
         private int Incrementor = 10;
         private double expectedMax { get; set; }

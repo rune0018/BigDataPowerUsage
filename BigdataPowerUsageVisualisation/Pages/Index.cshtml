@@ -2,19 +2,23 @@
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
-    var data = (Power[])ViewData["data"];
+    var data = (Dictionary<string,Power[]>)ViewData["data"];
 }
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    <ejs-chart id="hmmmm" title="PowerUsage" width="60%">
+    @foreach(var a in data)
+    {
+    <ejs-chart id="@a.Key" title="PowerUsage @a.Key" width="60%">
         <e-chart-primaryxaxis valueType="DateTime"
                               edgeLabelPlacement="Shift"></e-chart-primaryxaxis>
         <e-series-collection>
-            <e-series dataSource="data" name="PowerUsage" xName="Time" width="2" opacity="1" yName="Usage" type="@Syncfusion.EJ2.Charts.ChartSeriesType.Spline"></e-series>
+            <e-series dataSource="a.Value" name="PowerUsage" xName="Time" width="2" opacity="1" yName="Usage" type="@Syncfusion.EJ2.Charts.ChartSeriesType.Spline"></e-series>
         </e-series-collection>
         <e-chart-zoomsettings enableMouseWheelZooming="true" enableScrollbar="true" enablePinchZooming="true" enableSelectionZooming="true"></e-chart-zoomsettings>
     </ejs-chart>
+        
+    }
     <p>@data</p>
 </div>

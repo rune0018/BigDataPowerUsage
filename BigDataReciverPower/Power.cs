@@ -5,26 +5,28 @@ namespace BigDataReciverPower
     public class Power
     {
         public DateTime Time { get; set; } = DateTime.Now;
-        public string? Town { get; set; }
+        public string? House { get; set; }
         public int Usage { get; set; }
         private int Incrementor = 10;
-        private double expectedMax { get; set; }
+        public double expectedMax { get; set; }
         private Random random {  get; set; } = new Random();
-        private int Workat { get; set; } = 6;
-        private int Homeat { get; set; } = 16;
-        private int Sleepat { get; set; } = 1;
-        private int Upat { get; set; } = 4;
-        public Power() { }
+        public int Workat { get; set; }
+        public int Homeat { get; set; }
+        public int Sleepat { get; set; }
+        public int UpAt { get; set; }
+        private bool sleeping { get; set; }
+        public Power() {}
         public Power(int seed)
         {
             random = new Random(seed);
             Usage = 100;
-            expectedMax = 100;
+            if(expectedMax == 0)
+                expectedMax = 100;
             random.Next(10000);
         }
         public Power(int seed, int workat, int homeat, int sleepat,int upat) : this(seed)
         {
-            Workat = workat; Homeat = homeat; Sleepat = sleepat; Upat = upat;
+            Workat = workat; Homeat = homeat; Sleepat = sleepat; UpAt = upat;
         }
         public void Update()
         {
@@ -37,11 +39,16 @@ namespace BigDataReciverPower
                     Usage = Incrementor/2+Usage;
                 else
                     Usage -= Incrementor;
-            if (Usage < 0)
+            if (Usage < 0) 
                 Usage = 0;
             if (Time.Hour >= Workat && Time.Hour <= Homeat && Time.DayOfWeek != DayOfWeek.Saturday && Time.DayOfWeek != DayOfWeek.Sunday)
                 Usage = (int)(expectedMax * 0.17);
-            if (Time.Hour >= Sleepat || Time.Hour <= Upat)
+            if (Time.Hour == Sleepat)
+                sleeping = true;
+            if (Time.Hour == UpAt)
+                sleeping = false;
+
+            if(sleeping)
                 Usage = (int)(expectedMax * 0.30);
         }
         
