@@ -44,10 +44,10 @@ namespace BigDataReciverPower.Controllers
             return Ok(_power);
         }
         // GET api/<PowerController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("Json/{name}")]
+        public IActionResult Get(string name)
         {
-            return "value";
+            return Ok( _power[name]);
         }
         [HttpGet("Generate/{amount}/seed/{seed}")]
         public IActionResult GenerateSeeded(int amount,int seed,int startworkat,int homeat,int bedtime,int upat)
@@ -80,28 +80,54 @@ namespace BigDataReciverPower.Controllers
                     Sleepat = power1.Sleepat,
                     UpAt = power1.UpAt
                 };
-                _power.Add(power1.House, new List<Power>());
-                for(int i = 0; i<power.Amount; i++)
-                {
-                    power2.Update();
-                    _power[power1.House].Add(new Power() { Usage=power2.Usage,House=power2.House,Time=new DateTime(power2.Time.Year, power2.Time.Month, power2.Time.Day).AddHours(power2.Time.Hour) });
-                }
+                createWithCntext(power2, power.Amount);
             }
             //_power.TryAdd(DateTime.Now, power);
             
-            return Ok(power);
+            return Ok(_power);
         }
 
         // PUT api/<PowerController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("{name}")]
+        public IActionResult Put(string name, [FromBody] Power power,int amount,int seed)
         {
+            if (!_power.ContainsKey(name)) return NotFound(name + " is not a valid entry");
+            _power.Remove(name);
+            Power temp = new(seed)
+            {
+                House = name,
+                Time = DateTime.Now,
+                Workat = power.Workat,
+                Homeat = power.Homeat,
+                Sleepat = power.Sleepat,
+                UpAt = power.UpAt
+            };
+            createWithCntext(temp, amount);
+            return Ok(_power[name]);
         }
 
         // DELETE api/<PowerController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("name/{name}")]
+        public void Delete(string name)
         {
+            _power.Remove(name);
+        }
+
+        [HttpDelete("Clear")]
+        public void Clear()
+        {
+            _power.Clear();
+        }
+
+        [NonAction]
+        public void createWithCntext(Power power ,int amount)
+        {
+            _power.Add(power.House, new List<Power>());
+            for (int i = 0; i < amount; i++)
+            {
+                power.Update();
+                _power[power.House].Add(new Power() { Usage = power.Usage, House = power.House, Time = new DateTime(power.Time.Year, power.Time.Month, power.Time.Day).AddHours(power.Time.Hour) });
+            }
         }
     }
 }

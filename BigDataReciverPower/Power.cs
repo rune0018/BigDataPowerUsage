@@ -38,7 +38,7 @@ namespace BigDataReciverPower
                 if (random.Next() == 1)
                     Usage = Incrementor/2+Usage;
                 else
-                    Usage -= Incrementor;
+                    Usage = Usage-(Incrementor/2);
             if (Usage < 0) 
                 Usage = 0;
             if (Time.Hour >= Workat && Time.Hour <= Homeat && Time.DayOfWeek != DayOfWeek.Saturday && Time.DayOfWeek != DayOfWeek.Sunday)
